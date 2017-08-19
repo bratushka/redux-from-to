@@ -1,4 +1,0 @@
-describe('', () => {
-  it('should fail', () => {
-  });
-});
