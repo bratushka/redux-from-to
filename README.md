@@ -86,8 +86,10 @@ State before:
 ```
 Dispatch `carrier`:
 ```js
+// axios call returns {"mood": "happy"} as response body, 200 as status
+
 dispatch(carrier(
-  () => axios.get('dogs.io/good-boy'), // returns {"mood": "happy"} as response body, 200 as status
+  () => axios.get('dogs.io/good-boy'),
   ['dogs', 'goodBoy'],
 ));
 ```
@@ -128,8 +130,10 @@ State before:
 ```
 Dispatch `carrier`:
 ```js
+// axios call returns {"not": "found"} as response body, 404 as status
+
 dispatch(carrier(
-  () => axios.get('dogs.io/bad-boy'), // returns {"not": "found"} as response body, 404 as status
+  () => axios.get('dogs.io/bad-boy'), 
   ['dogs', 'goodBoy'],
 ));
 ```
@@ -152,7 +156,7 @@ State after the axios call:
     badBoy: {
       isRequesting: false,
       error: {
-        data: { not: "found" },
+        data: { not: 'found' },
         status: 404,
       },
     },
