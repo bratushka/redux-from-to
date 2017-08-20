@@ -5,17 +5,20 @@ import { ACTIONS } from '../src/constants';
 import { actionTypeBuilder } from '../src/utils';
 
 
-const locationMock = ['some', 'path'];
+const requestTargetMock = ['some', 'request'];
+const errorTargetMock = ['some', 'error'];
+const dataTargetMock = ['some', 'data'];
 const errorMock = { some: 'error' };
 const dataMock = { some: 'data' };
 
 describe('actions', () => {
   describe('request', () => {
     it('should return expected action object', () => {
-      const actual = request(locationMock);
+      const actual = request(undefined, requestTargetMock, errorTargetMock, dataTargetMock);
       const expected = {
-        type: actionTypeBuilder(locationMock, ACTIONS.REQUEST),
-        location: locationMock,
+        type: actionTypeBuilder(dataTargetMock, ACTIONS.REQUEST),
+        requestTarget: requestTargetMock,
+        errorTarget: errorTargetMock,
       };
 
       expect(actual).to.deep.equal(expected);
@@ -24,11 +27,13 @@ describe('actions', () => {
 
   describe('failure', () => {
     it('should return expected action object', () => {
-      const actual = failure(locationMock, errorMock);
+      const actual = failure(errorMock, requestTargetMock, errorTargetMock, dataTargetMock);
       const expected = {
-        type: actionTypeBuilder(locationMock, ACTIONS.FAILURE),
-        error: errorMock,
-        location: locationMock,
+        type: actionTypeBuilder(dataTargetMock, ACTIONS.FAILURE),
+        data: errorMock,
+        requestTarget: requestTargetMock,
+        errorTarget: errorTargetMock,
+        dataTarget: dataTargetMock,
       };
 
       expect(actual).to.deep.equal(expected);
@@ -37,11 +42,12 @@ describe('actions', () => {
 
   describe('success', () => {
     it('should return expected action object', () => {
-      const actual = success(locationMock, dataMock);
+      const actual = success(dataMock, requestTargetMock, undefined, dataTargetMock);
       const expected = {
-        type: actionTypeBuilder(locationMock, ACTIONS.SUCCESS),
+        type: actionTypeBuilder(dataTargetMock, ACTIONS.SUCCESS),
         data: dataMock,
-        location: locationMock,
+        requestTarget: requestTargetMock,
+        dataTarget: dataTargetMock,
       };
 
       expect(actual).to.deep.equal(expected);

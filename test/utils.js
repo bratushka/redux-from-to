@@ -1,7 +1,13 @@
 import { expect } from 'chai';
 
 import { PREFIX, ACTIONS } from '../src/constants';
-import { actionTypeBuilder, actionTypeMatcher } from '../src/utils';
+import {
+  actionTypeBuilder,
+  isRequest,
+  isFailure,
+  isSuccess,
+  actionTypeMatches,
+} from '../src/utils';
 
 
 describe('utils', () => {
@@ -28,10 +34,58 @@ describe('utils', () => {
     });
   });
 
-  describe('actionTypeMatcher', () => {
+  describe('isRequest', () => {
+    it('should return true when action ends with REQUEST', () => {
+      const actual = isRequest('some/REQUEST');
+
+      // noinspection BadExpressionStatementJS
+      expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
+    });
+
+    it('should return false when action doesn\'t end with REQUEST', () => {
+      const actual = isRequest('some/REQUESTS');
+
+      // noinspection BadExpressionStatementJS
+      expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
+    });
+  });
+
+  describe('isFailure', () => {
+    it('should return true when action ends with FAILURE', () => {
+      const actual = isFailure('some/FAILURE');
+
+      // noinspection BadExpressionStatementJS
+      expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
+    });
+
+    it('should return false when action doesn\'t end with FAILURE', () => {
+      const actual = isFailure('some/FAILURES');
+
+      // noinspection BadExpressionStatementJS
+      expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
+    });
+  });
+
+  describe('isSuccess', () => {
+    it('should return true when action ends with SUCCESS', () => {
+      const actual = isSuccess('some/SUCCESS');
+
+      // noinspection BadExpressionStatementJS
+      expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
+    });
+
+    it('should return false when action doesn\'t end with SUCCESS', () => {
+      const actual = isSuccess('some/SUCCESSES');
+
+      // noinspection BadExpressionStatementJS
+      expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
+    });
+  });
+
+  describe('actionTypeMatches', () => {
     it('should match the REQUEST action', () => {
       const action = actionTypeBuilder(['location'], ACTIONS.REQUEST);
-      const actual = actionTypeMatcher(action);
+      const actual = actionTypeMatches(action);
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
@@ -39,7 +93,7 @@ describe('utils', () => {
 
     it('should match the FAILURE action', () => {
       const action = actionTypeBuilder(['location'], ACTIONS.FAILURE);
-      const actual = actionTypeMatcher(action);
+      const actual = actionTypeMatches(action);
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
@@ -47,7 +101,7 @@ describe('utils', () => {
 
     it('should match the SUCCESS action', () => {
       const action = actionTypeBuilder(['location'], ACTIONS.SUCCESS);
-      const actual = actionTypeMatcher(action);
+      const actual = actionTypeMatches(action);
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
@@ -55,7 +109,7 @@ describe('utils', () => {
 
     it('should not match the SUCCESS action when prefix differs', () => {
       const action = `some/action/${ACTIONS.SUCCESS}`;
-      const actual = actionTypeMatcher(action);
+      const actual = actionTypeMatches(action);
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
@@ -63,7 +117,7 @@ describe('utils', () => {
 
     it('should not match actions with correct prefix and incorrect postfix', () => {
       const action = `${PREFIX}/some/action`;
-      const actual = actionTypeMatcher(action);
+      const actual = actionTypeMatches(action);
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions

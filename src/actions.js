@@ -5,42 +5,53 @@ import { actionTypeBuilder } from './utils';
 /**
  * Dispatched before `from` promise is generated.
  *
- * @param {string[]} location
+ * @param {undefined} _data
+ * @param {string[]} requestTarget
+ * @param {string[]} errorTarget
+ * @param {undefined} dataTarget
  * @return {Object}
  */
-export function request(location) {
+export function request(_data, requestTarget, errorTarget, dataTarget) {
   return {
-    type: actionTypeBuilder(location, ACTIONS.REQUEST),
-    location,
+    type: actionTypeBuilder(dataTarget, ACTIONS.REQUEST),
+    requestTarget,
+    errorTarget,
   };
 }
 
 /**
  * Dispatched if `from` promise rejects.
  *
- * @param {string[]} location
- * @param {any} error
+ * @param {any} data
+ * @param {string[]} requestTarget
+ * @param {string[]} errorTarget
+ * @param {string[]} dataTarget
  * @return {Object}
  */
-export function failure(location, error) {
+export function failure(data, requestTarget, errorTarget, dataTarget) {
   return {
-    type: actionTypeBuilder(location, ACTIONS.FAILURE),
-    location,
-    error,
+    type: actionTypeBuilder(dataTarget, ACTIONS.FAILURE),
+    data,
+    requestTarget,
+    errorTarget,
+    dataTarget,
   };
 }
 
 /**
  * Dispatched if `from` promise resolves.
  *
- * @param {string[]} location
  * @param {any} data
+ * @param {string[]} requestTarget
+ * @param {undefined} _errorTarget
+ * @param {string[]} dataTarget
  * @return {Object}
  */
-export function success(location, data) {
+export function success(data, requestTarget, _errorTarget, dataTarget) {
   return {
-    type: actionTypeBuilder(location, ACTIONS.SUCCESS),
-    location,
+    type: actionTypeBuilder(dataTarget, ACTIONS.SUCCESS),
     data,
+    requestTarget,
+    dataTarget,
   };
 }

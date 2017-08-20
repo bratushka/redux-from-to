@@ -1,4 +1,4 @@
-// export function currier(
+// export function carrier(
 //   from, // Promise
 //   to, // string[]|Object
 //   through, // Object
