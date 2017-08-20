@@ -14,26 +14,26 @@ export function actionTypeBuilder(dataPath, postfix) {
   return [PREFIX, ...dataPath, postfix].join('/');
 }
 
-export function isRequest(actionType) {
-  return actionType.slice(actionType.length - 7) === ACTIONS.REQUEST;
+export function isRequest(action) {
+  return action.type.slice(action.type.length - 7) === ACTIONS.REQUEST;
 }
 
-export function isFailure(actionType) {
-  return actionType.slice(actionType.length - 7) === ACTIONS.FAILURE;
+export function isFailure(action) {
+  return action.type.slice(action.type.length - 7) === ACTIONS.FAILURE;
 }
 
-export function isSuccess(actionType) {
-  return actionType.slice(actionType.length - 7) === ACTIONS.SUCCESS;
+export function isSuccess(action) {
+  return action.type.slice(action.type.length - 7) === ACTIONS.SUCCESS;
 }
 
 /**
- * Returns true is prefix and postfix of the action type match actionTypeBuilder, false otherwise.
+ * Returns true is prefix and postfix of the action type match action.typeBuilder, false otherwise.
  *
- * @param {string} actionType
+ * @param {Object} action
  * @return {boolean}
  */
-export function actionTypeMatches(actionType) {
-  return actionType.indexOf(PREFIX) === 0;
+export function actionTypeMatches(action) {
+  return action.type.indexOf(PREFIX) === 0;
 }
 
 /**

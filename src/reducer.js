@@ -11,7 +11,7 @@ import { isRequest, isFailure, isSuccess } from './utils';
  * @return {Object}
  */
 export function reducer(state = {}, action) {
-  if (isRequest(action.type)) {
+  if (isRequest(action)) {
     const newState = { ...state };
     newState[action.requestTarget[0]] = state[action.requestTarget[0]].setIn(
       action.requestTarget.slice(1),
@@ -22,7 +22,7 @@ export function reducer(state = {}, action) {
     );
 
     return newState;
-  } else if (isFailure(action.type)) {
+  } else if (isFailure(action)) {
     const newState = { ...state };
     newState[action.requestTarget[0]] = state[action.requestTarget[0]].setIn(
       action.requestTarget.slice(1),
@@ -37,7 +37,7 @@ export function reducer(state = {}, action) {
     );
 
     return newState;
-  } else if (isSuccess(action.type)) {
+  } else if (isSuccess(action)) {
     const newState = { ...state };
     newState[action.requestTarget[0]] = state[action.requestTarget[0]].setIn(
       action.requestTarget.slice(1),

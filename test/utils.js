@@ -37,14 +37,14 @@ describe('utils', () => {
 
   describe('isRequest', () => {
     it('should return true when action ends with REQUEST', () => {
-      const actual = isRequest('some/REQUEST');
+      const actual = isRequest({ type: 'some/REQUEST'});
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should return false when action doesn\'t end with REQUEST', () => {
-      const actual = isRequest('some/REQUESTS');
+      const actual = isRequest({ type: 'some/REQUESTS'});
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
@@ -53,14 +53,14 @@ describe('utils', () => {
 
   describe('isFailure', () => {
     it('should return true when action ends with FAILURE', () => {
-      const actual = isFailure('some/FAILURE');
+      const actual = isFailure({ type: 'some/FAILURE'});
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should return false when action doesn\'t end with FAILURE', () => {
-      const actual = isFailure('some/FAILURES');
+      const actual = isFailure({ type: 'some/FAILURES'});
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
@@ -69,14 +69,14 @@ describe('utils', () => {
 
   describe('isSuccess', () => {
     it('should return true when action ends with SUCCESS', () => {
-      const actual = isSuccess('some/SUCCESS');
+      const actual = isSuccess({ type: 'some/SUCCESS'});
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should return false when action doesn\'t end with SUCCESS', () => {
-      const actual = isSuccess('some/SUCCESSES');
+      const actual = isSuccess({ type: 'some/SUCCESSES'});
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
@@ -85,16 +85,16 @@ describe('utils', () => {
 
   describe('actionTypeMatches', () => {
     it('should match the SUCCESS action', () => {
-      const action = actionTypeBuilder(['location'], ACTIONS.SUCCESS);
-      const actual = actionTypeMatches(action);
+      const actionType = actionTypeBuilder(['location'], ACTIONS.SUCCESS);
+      const actual = actionTypeMatches({ type: actionType });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should not match the SUCCESS action when prefix differs', () => {
-      const action = `some/action/${ACTIONS.SUCCESS}`;
-      const actual = actionTypeMatches(action);
+      const actionType = `some/action/${ACTIONS.SUCCESS}`;
+      const actual = actionTypeMatches({ type: actionType });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
