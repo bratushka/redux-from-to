@@ -14,14 +14,32 @@ export function actionTypeBuilder(dataPath, postfix) {
   return [PREFIX, ...dataPath, postfix].join('/');
 }
 
+/**
+ * Checks if action.type finishes with REQUEST.
+ *
+ * @param {Object} action
+ * @return {boolean}
+ */
 export function isRequest(action) {
   return action.type.slice(action.type.length - 7) === ACTIONS.REQUEST;
 }
 
+/**
+ * Checks if action.type finishes with FAILURE.
+ *
+ * @param {Object} action
+ * @return {boolean}
+ */
 export function isFailure(action) {
   return action.type.slice(action.type.length - 7) === ACTIONS.FAILURE;
 }
 
+/**
+ * Checks if action.type finishes with SUCCESS.
+ *
+ * @param {Object} action
+ * @return {boolean}
+ */
 export function isSuccess(action) {
   return action.type.slice(action.type.length - 7) === ACTIONS.SUCCESS;
 }

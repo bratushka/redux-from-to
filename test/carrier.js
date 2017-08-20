@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import { expect } from 'chai';
 
-import { carrier, defaultErrorAdapter, defaultDataAdapter } from '../src/carrier';
+import { carrier } from '../src/carrier';
 import { isRequest, isFailure, isSuccess } from '../src/utils';
 
 
@@ -13,6 +13,9 @@ const mockTargets = {
   failure: ['failures', 'error'],
   success: ['successes', 'data'],
 };
+function getStore() {
+  return mockStore({ data: Immutable.Map() });
+}
 
 describe('carrier', () => {
   describe('should throw because of target', () => {
@@ -22,8 +25,11 @@ describe('carrier', () => {
         failures: Immutable.Map(),
         successes: Immutable.Map(),
       });
+      function actual() {
+        return store.dispatch(carrier(() => Promise.resolve({}), mockTargets));
+      }
 
-      expect(() => store.dispatch(carrier(() => Promise.resolve(), mockTargets))).to.throw(Error);
+      expect(actual).to.throw(Error);
     });
 
     it('failure', () => {
@@ -32,8 +38,11 @@ describe('carrier', () => {
         failures: {},
         successes: Immutable.Map(),
       });
+      function actual() {
+        return store.dispatch(carrier(() => Promise.resolve({}), mockTargets));
+      }
 
-      expect(() => store.dispatch(carrier(() => Promise.resolve(), mockTargets))).to.throw(Error);
+      expect(actual).to.throw(Error);
     });
 
     it('success', () => {
@@ -42,8 +51,11 @@ describe('carrier', () => {
         failures: Immutable.Map(),
         successes: {},
       });
+      function actual() {
+        return store.dispatch(carrier(() => Promise.resolve({}), mockTargets));
+      }
 
-      expect(() => store.dispatch(carrier(() => Promise.resolve(), mockTargets))).to.throw(Error);
+      expect(actual).to.throw(Error);
     });
 
     it('any', () => {
@@ -57,9 +69,9 @@ describe('carrier', () => {
 
   describe('should dispatch', () => {
     it('REQUEST and SUCCESS on from.resolve', () => {
-      const store = mockStore({ data: Immutable.Map() });
+      const store = getStore();
 
-      return store.dispatch(carrier(() => Promise.resolve(), ['data'])).then(() => {
+      return store.dispatch(carrier(() => Promise.resolve({}), ['data'])).then(() => {
         const actions = store.getActions();
 
         // noinspection BadExpressionStatementJS
@@ -70,7 +82,7 @@ describe('carrier', () => {
     });
 
     it('REQUEST and FAILURE on from.reject', () => {
-      const store = mockStore({ data: Immutable.Map() });
+      const store = getStore();
 
       return store.dispatch(carrier(() => Promise.reject(Error()), ['data'])).then(() => {
         const actions = store.getActions();
@@ -79,6 +91,38 @@ describe('carrier', () => {
         expect(isRequest(actions[0])).to.be.true; // eslint-disable-line no-unused-expressions
         // noinspection BadExpressionStatementJS
         expect(isFailure(actions[1])).to.be.true; // eslint-disable-line no-unused-expressions
+      });
+    });
+  });
+
+  describe('should apply adapter', () => {
+    it('on data', () => {
+      const store = getStore();
+      const action = carrier(
+        () => Promise.resolve('data'),
+        ['data'],
+        { dataAdapter: data => [data, data].join(' ') },
+      );
+
+      return store.dispatch(action).then(() => {
+        const actions = store.getActions();
+
+        expect(actions[1].data).to.equal('data data');
+      });
+    });
+
+    it('on error', () => {
+      const store = getStore();
+      const action = carrier(
+        () => Promise.reject(Error('error')),
+        ['data'],
+        { errorAdapter: error => [error.message, error.message].join(' ') },
+      );
+
+      return store.dispatch(action).then(() => {
+        const actions = store.getActions();
+
+        expect(actions[1].error).to.equal('error error');
       });
     });
   });

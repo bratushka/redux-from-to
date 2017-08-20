@@ -37,14 +37,14 @@ describe('utils', () => {
 
   describe('isRequest', () => {
     it('should return true when action ends with REQUEST', () => {
-      const actual = isRequest({ type: 'some/REQUEST'});
+      const actual = isRequest({ type: 'some/REQUEST' });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should return false when action doesn\'t end with REQUEST', () => {
-      const actual = isRequest({ type: 'some/REQUESTS'});
+      const actual = isRequest({ type: 'some/REQUESTS' });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
@@ -53,14 +53,14 @@ describe('utils', () => {
 
   describe('isFailure', () => {
     it('should return true when action ends with FAILURE', () => {
-      const actual = isFailure({ type: 'some/FAILURE'});
+      const actual = isFailure({ type: 'some/FAILURE' });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should return false when action doesn\'t end with FAILURE', () => {
-      const actual = isFailure({ type: 'some/FAILURES'});
+      const actual = isFailure({ type: 'some/FAILURES' });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
@@ -69,14 +69,14 @@ describe('utils', () => {
 
   describe('isSuccess', () => {
     it('should return true when action ends with SUCCESS', () => {
-      const actual = isSuccess({ type: 'some/SUCCESS'});
+      const actual = isSuccess({ type: 'some/SUCCESS' });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
     });
 
     it('should return false when action doesn\'t end with SUCCESS', () => {
-      const actual = isSuccess({ type: 'some/SUCCESSES'});
+      const actual = isSuccess({ type: 'some/SUCCESSES' });
 
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions

@@ -1,23 +1,50 @@
+import Immutable from 'immutable';
 import values from 'lodash.values';
 
 import { request, failure, success } from './actions';
 import { checkTarget } from './utils';
 
 
+/**
+ * Error adapter suiting axios library.
+ *
+ * @param {Error} error
+ * @return {Object}
+ */
 export function defaultErrorAdapter(error) {
-  return error;
+  return Immutable.fromJS({
+    status: error.response ? error.response.status : 'panic',
+    data: error.response ? error.response.data : String(error),
+  });
 }
 
-export function defaultDataAdapter(data) {
-  return data;
+/**
+ * Data adapter suiting axios library.
+ *
+ * @param {Object} response
+ * @return {any}
+ */
+export function defaultDataAdapter(response) {
+  return Immutable.fromJS(response.data);
 }
 
+/**
+ * Action creator to be dispatched. Waits for info from `from`, stores to `to` through `through`.
+ *
+ * @param {function(): Promise} from
+ * @param {Object|string[]} to
+ * @param {?Object} through
+ * @param {?function} through.errorAdapter
+ * @param {?function} through.dataAdapter
+ * @return {?function(dispatch: function, getState: function): Promise}
+ * @throws {Error}
+ */
 export function carrier(
   from,
   to,
   {
-    _errorAdapter = defaultErrorAdapter,
-    _dataAdapter = defaultDataAdapter,
+    errorAdapter = defaultErrorAdapter,
+    dataAdapter = defaultDataAdapter,
   } = {},
 ) {
   const targets = Array.isArray(to) ? {
@@ -33,8 +60,8 @@ export function carrier(
     dispatch(request(undefined, ...targetArgs));
 
     return from().then(
-      resolved => dispatch(success(resolved, ...targetArgs)),
-      rejected => dispatch(failure(rejected, ...targetArgs)),
+      resolved => dispatch(success(dataAdapter(resolved), ...targetArgs)),
+      rejected => dispatch(failure(errorAdapter(rejected), ...targetArgs)),
     );
   };
 }
