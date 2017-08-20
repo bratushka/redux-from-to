@@ -49,7 +49,7 @@ export function carrier(
 ) {
   const targets = Array.isArray(to) ? {
     request: [...to, 'isRequesting'],
-    error: [...to, 'error'],
+    failure: [...to, 'error'],
     success: [...to, 'data'],
   } : to;
 

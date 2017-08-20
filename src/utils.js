@@ -45,7 +45,7 @@ export function isSuccess(action) {
 }
 
 /**
- * Returns true is prefix and postfix of the action type match action.typeBuilder, false otherwise.
+ * Returns true is prefix of the action type matches action.typeBuilder, false otherwise.
  *
  * @param {Object} action
  * @return {boolean}
