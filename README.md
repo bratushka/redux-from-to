@@ -2,24 +2,22 @@
 
 # redux-carrier
 
-[TOC]
-
-### Why? (which problem do we have)
+## Why? (which problem do we have)
 
 Working with REST APIs we often have to make lots of calls to the server. Each call should produce a REQUEST/SUCCESS or
  REQUEST/FAILURE pair of actions, which should be 100% covered with tests. Each of the actions should have its own case
  in the reducer, each of them should be 100% tested too. Usually these actions/reducers/tests are 90% equal, so creating
  this piece of functionality is really boring.
 
-### So? (should we continue struggling)
+## So? (should we continue struggling)
 
 This library was written to get rid of all this boring copy-paste-modify process.
 
-### How? (in which way does this library resolve the problem)
+## How? (in which way does this library resolve the problem)
 
 Actions, reducer and tests are already written, just use it.
 
-### Installation
+## Installation
 
 1. Fetch the library from npm:
 ```sh
@@ -41,9 +39,9 @@ const store = createStore(
 ```
 3. You're all set!
 
-### API
+## API
 
-#### carrier(from, to, [through])
+### carrier(from, to, [through])
 
 Makes all the job for you. Dispatches REQUEST-FAILURE-SUCCESS, manages data in your store.
 
@@ -75,9 +73,9 @@ CAUTION: this library will work only with iterable properties of the state, crea
 This library was written for sing with [axios](https://github.com/mzabriskie/axios), so it has
  default adapters, which are available in `./src/carrier.js`.
 
-### Simple example
+## Simple example
 
-#### When resolves
+### When resolves
 
 State before:
 ```js
@@ -119,7 +117,7 @@ State after the axios call:
 }
 ```
 
-#### When rejects
+### When rejects
 
 State before:
 ```js
@@ -162,4 +160,6 @@ State after the axios call:
 }
 ```
 
-### Complex example
+## Complex example
+
+To be provided...
