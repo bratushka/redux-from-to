@@ -22,16 +22,16 @@ export function request(_data, requestTarget, errorTarget, dataTarget) {
 /**
  * Dispatched if `from` promise rejects.
  *
- * @param {any} data
+ * @param {any} error
  * @param {string[]} requestTarget
  * @param {string[]} errorTarget
  * @param {string[]} dataTarget
  * @return {Object}
  */
-export function failure(data, requestTarget, errorTarget, dataTarget) {
+export function failure(error, requestTarget, errorTarget, dataTarget) {
   return {
     type: actionTypeBuilder(dataTarget, ACTIONS.FAILURE),
-    data,
+    error,
     requestTarget,
     errorTarget,
     dataTarget,

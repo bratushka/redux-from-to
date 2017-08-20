@@ -1,3 +1,5 @@
+import Immutable from 'immutable';
+
 import { PREFIX, ACTIONS } from './constants';
 
 
@@ -31,9 +33,18 @@ export function isSuccess(actionType) {
  * @return {boolean}
  */
 export function actionTypeMatches(actionType) {
-  return actionType.indexOf(PREFIX) === 0 && (
-    isRequest(actionType)
-    || isFailure(actionType)
-    || isSuccess(actionType)
-  );
+  return actionType.indexOf(PREFIX) === 0;
+}
+
+/**
+ * Throws if state[target[0]] is not an immutable structure.
+ *
+ * @param {Object} state
+ * @param {string[]} target
+ * @throws {Error}
+ */
+export function checkTarget(state, target) {
+  if (!Immutable.Iterable.isIterable(state[target[0]])) {
+    throw new Error(`"state['${target[0]}']" should be an immutable structure.`);
+  }
 }

@@ -1,12 +1,13 @@
+import Immutable from 'immutable';
 import { expect } from 'chai';
 
-import { PREFIX, ACTIONS } from '../src/constants';
+import { ACTIONS } from '../src/constants';
 import {
   actionTypeBuilder,
+  actionTypeMatches,
   isRequest,
   isFailure,
-  isSuccess,
-  actionTypeMatches,
+  isSuccess, checkTarget,
 } from '../src/utils';
 
 
@@ -83,22 +84,6 @@ describe('utils', () => {
   });
 
   describe('actionTypeMatches', () => {
-    it('should match the REQUEST action', () => {
-      const action = actionTypeBuilder(['location'], ACTIONS.REQUEST);
-      const actual = actionTypeMatches(action);
-
-      // noinspection BadExpressionStatementJS
-      expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
-    });
-
-    it('should match the FAILURE action', () => {
-      const action = actionTypeBuilder(['location'], ACTIONS.FAILURE);
-      const actual = actionTypeMatches(action);
-
-      // noinspection BadExpressionStatementJS
-      expect(actual).to.be.true; // eslint-disable-line no-unused-expressions
-    });
-
     it('should match the SUCCESS action', () => {
       const action = actionTypeBuilder(['location'], ACTIONS.SUCCESS);
       const actual = actionTypeMatches(action);
@@ -114,13 +99,23 @@ describe('utils', () => {
       // noinspection BadExpressionStatementJS
       expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
     });
+  });
 
-    it('should not match actions with correct prefix and incorrect postfix', () => {
-      const action = `${PREFIX}/some/action`;
-      const actual = actionTypeMatches(action);
+  describe('checkTarget', () => {
+    it('should throw when state[target[0]] is not immutable structure', () => {
+      function actual() {
+        checkTarget({ request: {} }, ['request', 1]);
+      }
 
-      // noinspection BadExpressionStatementJS
-      expect(actual).to.be.false; // eslint-disable-line no-unused-expressions
+      expect(actual).to.throw(Error);
+    });
+
+    it('should not throw when state[target[0]] is immutable structure', () => {
+      function actual() {
+        checkTarget({ request: Immutable.Map() }, ['request', 1]);
+      }
+
+      expect(actual).not.to.throw(Error);
     });
   });
 });

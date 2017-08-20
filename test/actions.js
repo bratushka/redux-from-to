@@ -30,7 +30,7 @@ describe('actions', () => {
       const actual = failure(errorMock, requestTargetMock, errorTargetMock, dataTargetMock);
       const expected = {
         type: actionTypeBuilder(dataTargetMock, ACTIONS.FAILURE),
-        data: errorMock,
+        error: errorMock,
         requestTarget: requestTargetMock,
         errorTarget: errorTargetMock,
         dataTarget: dataTargetMock,
@@ -42,7 +42,7 @@ describe('actions', () => {
 
   describe('success', () => {
     it('should return expected action object', () => {
-      const actual = success(dataMock, requestTargetMock, undefined, dataTargetMock);
+      const actual = success(dataMock, requestTargetMock, errorTargetMock, dataTargetMock);
       const expected = {
         type: actionTypeBuilder(dataTargetMock, ACTIONS.SUCCESS),
         data: dataMock,
