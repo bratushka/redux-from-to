@@ -1,13 +1,14 @@
 {
   "name": "redux-carrier",
   "version": "0.1.0",
+  "main": "./src/index.js",
   "description": "Redux state manager for handling requests",
   "scripts": {
     "lint": "eslint .",
     "test": "mocha --compilers js:babel-core/register"
   },
-  "author": "Vasyl Bratushka",
-  "license": "MIT",
+  "author": "Vasyl Bratushka <bratushka.v@gmail.com>",
+  "license": "WTFPL",
   "keywords": [
     "carrier",
     "immutable",
