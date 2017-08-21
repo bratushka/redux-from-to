@@ -2,6 +2,18 @@
 
 # redux-carrier
 
+- [Why? (which problem do we have)](#why---which-problem-do-we-have-)
+- [So? (should we continue struggling)](#so---should-we-continue-struggling-)
+- [How? (in which way does this library resolve the problem)](#how---in-which-way-does-this-library-resolve-the-problem-)
+- [Installation](#installation)
+- [API](#api)
+  * [carrier(from, to, [through])](#carrier-from--to---through--)
+- [Simple example](#simple-example)
+  * [When resolves](#when-resolves)
+  * [When rejects](#when-rejects)
+- [Complex example](#complex-example)
+  * [When resolves](#when-resolves-1)
+
 ## Why? (which problem do we have)
 
 Working with REST APIs we often have to make lots of calls to the server. Each call should produce a REQUEST/SUCCESS or
