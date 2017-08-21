@@ -24,7 +24,7 @@ export function defaultErrorAdapter(error) {
  * @param {Object} response
  * @return {any}
  */
-export function defaultDataAdapter(response) {
+export function defaultResponseAdapter(response) {
   return Immutable.fromJS(response.data);
 }
 
@@ -35,7 +35,7 @@ export function defaultDataAdapter(response) {
  * @param {Object|string[]} to
  * @param {?Object} through
  * @param {?function} through.errorAdapter
- * @param {?function} through.dataAdapter
+ * @param {?function} through.responseAdapter
  * @return {?function(dispatch: function, getState: function): Promise}
  * @throws {Error}
  */
@@ -44,7 +44,7 @@ export function carrier(
   to,
   {
     errorAdapter = defaultErrorAdapter,
-    dataAdapter = defaultDataAdapter,
+    responseAdapter = defaultResponseAdapter,
   } = {},
 ) {
   const targets = Array.isArray(to) ? {
@@ -60,7 +60,7 @@ export function carrier(
     dispatch(request(undefined, ...targetArgs));
 
     return from().then(
-      resolved => dispatch(success(dataAdapter(resolved), ...targetArgs)),
+      resolved => dispatch(success(responseAdapter(resolved), ...targetArgs)),
       rejected => dispatch(failure(errorAdapter(rejected), ...targetArgs)),
     );
   };

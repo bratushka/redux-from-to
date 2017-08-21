@@ -101,7 +101,7 @@ describe('carrier', () => {
       const action = carrier(
         () => Promise.resolve('data'),
         ['data'],
-        { dataAdapter: data => [data, data].join(' ') },
+        { responseAdapter: data => [data, data].join(' ') },
       );
 
       return store.dispatch(action).then(() => {

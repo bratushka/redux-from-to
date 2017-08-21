@@ -68,7 +68,7 @@ CAUTION: this library will work only with iterable properties of the state, crea
 
 3. `[ through ]` (Object): contains adapters, which should return transformed data before saving it
  to the store. Can contain following properties:
- - `dataAdapter` (Function): will receive resolved data as the only argument,
+ - `responseAdapter` (Function): will receive resolved data as the only argument,
  - `errorAdapter` (Function): will receive rejected data as the only argument.
 This library was written for sing with [axios](https://github.com/mzabriskie/axios), so it has
  default adapters, which are available in `./src/carrier.js`.
@@ -166,4 +166,57 @@ State after the axios call:
 
 ## Complex example
 
-To be provided...
+### When resolves
+
+State before:
+```js
+{
+  ...otherData,
+  dogs: Immutable.fromJS({}),
+  errors: Immutable.fromJS({}),
+  requests: Immutable.fromJS({}),
+}
+```
+Dispatch `carrier`:
+```js
+// axios call returns {results: {"mood": "happy"}} as response body, 200 as status
+
+dispatch(carrier(
+  () => axios.get('dogs.io/good-boy'),
+  {
+    request: ['dogs', 'goodBoy'],
+    failure: ['errors', 'goodBoy'],
+    success: ['requests', 'goodBoy'],
+  },
+  {
+    errorAdapter: error => `The error is ${error}`,
+    responseAdapter: response => response.data.results,
+  },
+));
+```
+State during the axios call:
+```js
+{
+  ...otherData,
+  dogs: Immutable.fromJS({}),
+  errors: Immutable.fromJS({}),
+  requests: Immutable.fromJS({
+    goodBoy: true,
+  }),
+}
+```
+State after the axios call:
+```js
+{
+  ...otherData,
+  dogs: Immutable.fromJS({
+    goodBoy: {
+      mood: 'happy',
+    },
+  }),
+  errors: Immutable.fromJS({}),
+  requests: Immutable.fromJS({
+    goodBoy: false,
+  }),
+}
+```
