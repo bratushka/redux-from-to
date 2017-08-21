@@ -92,4 +92,64 @@ describe('reducer', () => {
       expect(actual).to.deep.equal(Immutable.fromJS(dataMock));
     });
   });
+
+  describe('state changes', () => {
+    const localDataMock = Immutable.fromJS({ some: 'data' });
+    const localStateMock = {
+      reducer: Immutable.fromJS({
+        success: localDataMock,
+      }),
+    };
+
+    const localActionArgs = [
+      dataMock,
+      ['reducer', 'request'],
+      ['reducer', 'failure'],
+      ['reducer', 'success'],
+    ];
+
+    it('should not be lost during executing request action', () => {
+      const actual = reducer(localStateMock, request(...localActionArgs));
+      const actualRequest = actual.reducer.getIn(['request']);
+      const actualFailure = actual.reducer.getIn(['failure']);
+      const actualSuccess = actual.reducer.getIn(['success']);
+
+      // noinspection BadExpressionStatementJS
+      expect(actualRequest).to.be.true; // eslint-disable-line no-unused-expressions
+      // noinspection BadExpressionStatementJS
+      expect(actualFailure).to.be.undefined; // eslint-disable-line no-unused-expressions
+
+      expect(actualSuccess).to.equal(localDataMock);
+    });
+
+    it('should not be lost during executing failure action', () => {
+      const state = reducer(localStateMock, request(...localActionArgs));
+      const actual = reducer(state, failure(...localActionArgs));
+      const actualRequest = actual.reducer.getIn(['request']);
+      const actualFailure = actual.reducer.getIn(['failure']);
+      const actualSuccess = actual.reducer.getIn(['success']);
+
+      // noinspection BadExpressionStatementJS
+      expect(actualRequest).to.be.false; // eslint-disable-line no-unused-expressions
+
+      expect(actualFailure).to.deep.equal(localDataMock);
+      // noinspection BadExpressionStatementJS
+      expect(actualSuccess).to.be.undefined; // eslint-disable-line no-unused-expressions
+    });
+
+    it('should not be lost during executing success action', () => {
+      const state = reducer(localStateMock, request(...localActionArgs));
+      const actual = reducer(state, success(...localActionArgs));
+      const actualRequest = actual.reducer.getIn(['request']);
+      const actualFailure = actual.reducer.getIn(['failure']);
+      const actualSuccess = actual.reducer.getIn(['success']);
+
+      // noinspection BadExpressionStatementJS
+      expect(actualRequest).to.be.false; // eslint-disable-line no-unused-expressions
+      // noinspection BadExpressionStatementJS
+      expect(actualFailure).to.be.undefined; // eslint-disable-line no-unused-expressions
+
+      expect(actualSuccess).to.deep.equal(localDataMock);
+    });
+  });
 });

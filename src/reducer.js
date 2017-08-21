@@ -17,7 +17,7 @@ export function reducer(state = {}, action) {
       action.requestTarget.slice(1),
       true,
     );
-    newState[action.errorTarget[0]] = state[action.errorTarget[0]].deleteIn(
+    newState[action.errorTarget[0]] = newState[action.errorTarget[0]].deleteIn(
       action.errorTarget.slice(1),
     );
 
@@ -28,11 +28,11 @@ export function reducer(state = {}, action) {
       action.requestTarget.slice(1),
       false,
     );
-    newState[action.errorTarget[0]] = state[action.errorTarget[0]].setIn(
+    newState[action.errorTarget[0]] = newState[action.errorTarget[0]].setIn(
       action.errorTarget.slice(1),
       Immutable.fromJS(action.error),
     );
-    newState[action.dataTarget[0]] = state[action.dataTarget[0]].deleteIn(
+    newState[action.dataTarget[0]] = newState[action.dataTarget[0]].deleteIn(
       action.dataTarget.slice(1),
     );
 
@@ -43,7 +43,7 @@ export function reducer(state = {}, action) {
       action.requestTarget.slice(1),
       false,
     );
-    newState[action.dataTarget[0]] = state[action.dataTarget[0]].setIn(
+    newState[action.dataTarget[0]] = newState[action.dataTarget[0]].setIn(
       action.dataTarget.slice(1),
       Immutable.fromJS(action.data),
     );
