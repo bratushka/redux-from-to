@@ -1,10 +1,10 @@
 {
   "name": "redux-from-to",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
-  "description": "Redux state manager for handling requests",
+  "description": "Redux state manager for handling promises",
   "scripts": {
     "lint": "eslint .",
     "test": "mocha --compilers js:babel-core/register",
