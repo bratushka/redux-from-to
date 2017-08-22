@@ -15,21 +15,21 @@ describe('utils', () => {
   describe('actionTypeBuilder', () => {
     it('should build the type of the REQUEST action based on location', () => {
       const actual = actionTypeBuilder(['location', 'in', 'the', 'store'], ACTIONS.REQUEST);
-      const expected = '@@redux-carrier/location/in/the/store/REQUEST';
+      const expected = '@@redux-from-to/location/in/the/store/REQUEST';
 
       expect(actual).to.equal(expected);
     });
 
     it('should build the type of the FAILURE action based on location', () => {
       const actual = actionTypeBuilder(['location', 'in', 'the', 'store'], ACTIONS.FAILURE);
-      const expected = '@@redux-carrier/location/in/the/store/FAILURE';
+      const expected = '@@redux-from-to/location/in/the/store/FAILURE';
 
       expect(actual).to.equal(expected);
     });
 
     it('should build the type of the SUCCESS action based on location', () => {
       const actual = actionTypeBuilder(['location', 'in', 'the', 'store'], ACTIONS.SUCCESS);
-      const expected = '@@redux-carrier/location/in/the/store/SUCCESS';
+      const expected = '@@redux-from-to/location/in/the/store/SUCCESS';
 
       expect(actual).to.equal(expected);
     });

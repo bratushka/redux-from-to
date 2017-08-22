@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import { expect } from 'chai';
 
-import { carrier } from '../src/carrier';
+import { fromTo } from '../src/from-to';
 import { isRequest, isFailure, isSuccess } from '../src/utils';
 
 
@@ -17,7 +17,7 @@ function getStore() {
   return mockStore({ data: Immutable.Map() });
 }
 
-describe('carrier', () => {
+describe('fromTo', () => {
   describe('should throw because of target', () => {
     it('request', () => {
       const store = mockStore({
@@ -26,7 +26,7 @@ describe('carrier', () => {
         successes: Immutable.Map(),
       });
       function actual() {
-        return store.dispatch(carrier(() => Promise.resolve({}), mockTargets));
+        return store.dispatch(fromTo(() => Promise.resolve({}), mockTargets));
       }
 
       expect(actual).to.throw(Error);
@@ -39,7 +39,7 @@ describe('carrier', () => {
         successes: Immutable.Map(),
       });
       function actual() {
-        return store.dispatch(carrier(() => Promise.resolve({}), mockTargets));
+        return store.dispatch(fromTo(() => Promise.resolve({}), mockTargets));
       }
 
       expect(actual).to.throw(Error);
@@ -52,7 +52,7 @@ describe('carrier', () => {
         successes: {},
       });
       function actual() {
-        return store.dispatch(carrier(() => Promise.resolve({}), mockTargets));
+        return store.dispatch(fromTo(() => Promise.resolve({}), mockTargets));
       }
 
       expect(actual).to.throw(Error);
@@ -63,7 +63,7 @@ describe('carrier', () => {
         data: {},
       });
 
-      expect(() => store.dispatch(carrier(() => Promise.resolve(), ['data']))).to.throw(Error);
+      expect(() => store.dispatch(fromTo(() => Promise.resolve(), ['data']))).to.throw(Error);
     });
   });
 
@@ -71,7 +71,7 @@ describe('carrier', () => {
     it('REQUEST and SUCCESS on from.resolve', () => {
       const store = getStore();
 
-      return store.dispatch(carrier(() => Promise.resolve({}), ['data'])).then(() => {
+      return store.dispatch(fromTo(() => Promise.resolve({}), ['data'])).then(() => {
         const actions = store.getActions();
 
         // noinspection BadExpressionStatementJS
@@ -84,7 +84,7 @@ describe('carrier', () => {
     it('REQUEST and FAILURE on from.reject', () => {
       const store = getStore();
 
-      return store.dispatch(carrier(() => Promise.reject(Error()), ['data'])).then(() => {
+      return store.dispatch(fromTo(() => Promise.reject(Error()), ['data'])).then(() => {
         const actions = store.getActions();
 
         // noinspection BadExpressionStatementJS
@@ -98,7 +98,7 @@ describe('carrier', () => {
   describe('should apply adapter', () => {
     it('on data', () => {
       const store = getStore();
-      const action = carrier(
+      const action = fromTo(
         () => Promise.resolve('data'),
         ['data'],
         { responseAdapter: data => [data, data].join(' ') },
@@ -113,7 +113,7 @@ describe('carrier', () => {
 
     it('on error', () => {
       const store = getStore();
-      const action = carrier(
+      const action = fromTo(
         () => Promise.reject(Error('error')),
         ['data'],
         { errorAdapter: error => [error.message, error.message].join(' ') },

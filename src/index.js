@@ -1,6 +1,16 @@
-export * as actions from './actions';
-export { carrier } from './carrier';
-export * as constants from './constants';
-export { reducer } from './reducer';
-export * as utils from './utils';
-export { wrapper } from './wrapper';
+import * as actions from './actions';
+import { fromTo } from './from-to';
+import * as constants from './constants';
+import { reducer } from './reducer';
+import * as utils from './utils';
+import { wrapper } from './wrapper';
+
+
+export {
+  fromTo as default,
+  actions,
+  constants,
+  reducer,
+  utils,
+  wrapper,
+};

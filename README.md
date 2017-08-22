@@ -1,13 +1,13 @@
-[![Build Status](https://travis-ci.org/bratushka/redux-carrier.svg?branch=master)](https://travis-ci.org/bratushka/redux-carrier)
+[![Build Status](https://travis-ci.org/bratushka/redux-from-to.svg?branch=master)](https://travis-ci.org/bratushka/redux-from-to)
 
-# redux-carrier
+# redux-from-to
 
 - [Why? (which problem do we have)](#why---which-problem-do-we-have-)
 - [So? (should we continue struggling)](#so---should-we-continue-struggling-)
 - [How? (in which way does this library resolve the problem)](#how---in-which-way-does-this-library-resolve-the-problem-)
 - [Installation](#installation)
 - [API](#api)
-  * [carrier(from, to, [through])](#carrier-from--to---through--)
+  * [fromTo(from, to, [through])](#fromto-from--to---through--)
 - [Simple example](#simple-example)
   * [When resolves](#when-resolves)
   * [When rejects](#when-rejects)
@@ -33,13 +33,13 @@ Actions, reducer and tests are already written, just use it.
 
 1. Fetch the library from npm:
 ```sh
-you@your-computer /path/to/your/project $ yarn add redux-carrier
+you@your-computer /path/to/your/project $ yarn add redux-from-to
 ```
 2. Wrap your main reducer:
 ```js
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { wrapper } from 'redux-carrier';
+import { wrapper } from 'redux-from-to';
 
 import mainReducer from './mainReducer'
 
@@ -53,7 +53,7 @@ const store = createStore(
 
 ## API
 
-### carrier(from, to, [through])
+### fromTo(from, to, [through])
 
 Makes all the job for you. Dispatches REQUEST-FAILURE-SUCCESS, manages data in your store.
 
@@ -83,7 +83,7 @@ CAUTION: this library will work only with iterable properties of the state, crea
  - `responseAdapter` (Function): will receive resolved data as the only argument,
  - `errorAdapter` (Function): will receive rejected data as the only argument.
 This library was written for sing with [axios](https://github.com/mzabriskie/axios), so it has
- default adapters, which are available in `./src/carrier.js`.
+ default adapters, which are available in `./src/from-to.js`.
 
 ## Simple example
 
@@ -96,11 +96,11 @@ State before:
   dogs: Immutable.fromJS({}),
 }
 ```
-Dispatch `carrier`:
+Dispatch `fromTo`:
 ```js
 // axios call returns {"mood": "happy"} as response body, 200 as status
 
-dispatch(carrier(
+dispatch(fromTo(
   () => axios.get('dogs.io/good-boy'),
   ['dogs', 'goodBoy'],
 ));
@@ -140,11 +140,11 @@ State before:
   dogs: Immutable.fromJS({}),
 }
 ```
-Dispatch `carrier`:
+Dispatch `fromTo`:
 ```js
 // axios call returns {"not": "found"} as response body, 404 as status
 
-dispatch(carrier(
+dispatch(fromTo(
   () => axios.get('dogs.io/bad-boy'), 
   ['dogs', 'goodBoy'],
 ));
@@ -189,11 +189,11 @@ State before:
   requests: Immutable.fromJS({}),
 }
 ```
-Dispatch `carrier`:
+Dispatch `fromTo`:
 ```js
 // axios call returns {results: {"mood": "happy"}} as response body, 200 as status
 
-dispatch(carrier(
+dispatch(fromTo(
   () => axios.get('dogs.io/good-boy'),
   {
     request: ['dogs', 'goodBoy'],

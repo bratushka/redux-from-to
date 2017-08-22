@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { expect } from 'chai';
 import { createStore, applyMiddleware } from 'redux';
 
-import { carrier } from '../src/carrier';
+import { fromTo } from '../src/from-to';
 import { wrapper } from '../src/wrapper';
 
 const initialState = {
@@ -27,7 +27,7 @@ function getStore() {
 describe('wrapper', () => {
   it('should return reducer, which catches related actions', () => {
     const store = getStore();
-    const action = carrier(
+    const action = fromTo(
       () => Promise.resolve({ data: 'some data' }),
       ['immutable'],
     );

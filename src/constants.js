@@ -3,7 +3,7 @@
  *
  * @type {string}
  */
-export const PREFIX = '@@redux-carrier';
+export const PREFIX = '@@redux-from-to';
 
 /**
  * Postfixes for actions.

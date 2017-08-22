@@ -39,7 +39,7 @@ export function defaultResponseAdapter(response) {
  * @return {?function(dispatch: function, getState: function): Promise}
  * @throws {Error}
  */
-export function carrier(
+export function fromTo(
   from,
   to,
   {
