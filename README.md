@@ -2,12 +2,12 @@
 
 # redux-from-to
 
-- [Why? (which problem do we have)](#why---which-problem-do-we-have-)
-- [So? (should we continue struggling)](#so---should-we-continue-struggling-)
-- [How? (in which way does this library resolve the problem)](#how---in-which-way-does-this-library-resolve-the-problem-)
+- [Why? (which problem do we have)](#why-which-problem-do-we-have)
+- [So? (should we continue struggling)](#so-should-we-continue-struggling)
+- [How? (in which way does this library resolve the problem)](#how-in-which-way-does-this-library-resolve-the-problem)
 - [Installation](#installation)
 - [API](#api)
-  * [fromTo(from, to, [through])](#fromto-from--to---through--)
+  * [fromTo(from, to, [through])](#fromtofrom-to-through)
 - [Simple example](#simple-example)
   * [When resolves](#when-resolves)
   * [When rejects](#when-rejects)
