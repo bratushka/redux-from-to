@@ -7,9 +7,9 @@ import { wrapper } from './wrapper';
 
 
 export {
-  fromTo as default,
   actions,
   constants,
+  fromTo,
   reducer,
   utils,
   wrapper,
