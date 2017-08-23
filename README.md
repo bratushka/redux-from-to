@@ -2,101 +2,105 @@
 
 # redux-from-to
 
-- [Why? (which problem do we have)](#why-which-problem-do-we-have)
-- [So? (should we continue struggling)](#so-should-we-continue-struggling)
-- [How? (in which way does this library resolve the problem)](#how-in-which-way-does-this-library-resolve-the-problem)
-- [Installation](#installation)
-- [API](#api)
-  * [fromTo(from, to, [through])](#fromtofrom-to-through)
-- [Simple example](#simple-example)
-  * [When resolves](#when-resolves)
-  * [When rejects](#when-rejects)
-- [Complex example](#complex-example)
-  * [When resolves](#when-resolves-1)
+**redux-from-to** carries resources **from** APIs **to** your redux store.
 
-## Why? (which problem do we have)
+Stop writing the same old action and reducer logic and [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) up your redux application.
 
-Working with REST APIs we often have to make lots of calls to the server. Each call should produce a REQUEST/SUCCESS or
- REQUEST/FAILURE pair of actions, which should be 100% covered with tests. Each of the actions should have its own case
- in the reducer, each of them should be 100% tested too. Usually these actions/reducers/tests are 90% equal, so creating
- this piece of functionality is really boring.
+## Quick start
 
-## So? (should we continue struggling)
+Install
 
-This library was written to get rid of all this boring copy-paste-modify process.
-
-## How? (in which way does this library resolve the problem)
-
-Actions, reducer and tests are already written, just use it.
-
-## Installation
-
-1. Fetch the library from npm:
 ```sh
-you@your-computer /path/to/your/project $ yarn add redux-from-to
+$ npm install redux-from-to
 ```
-2. Wrap your main reducer:
+
+or
+
+```sh
+$ yarn add redux-from-to
+```
+
+Wrap your root reducer:
+
 ```js
+// store.js or wherever you create your store.
+
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { wrapper } from 'redux-from-to';
 
-import mainReducer from './mainReducer'
+import rootReducer from './rootReducer'
 
 
 const store = createStore(
-  wrapper(mainReducer),
+  wrapper(rootReducer),
   applyMiddleware(thunk),
 )
 ```
-3. You're all set!
+
+You're all set!
+
 
 ## API
 
 ### fromTo(from, to, [through])
 
-Makes all the job for you. Dispatches REQUEST-FAILURE-SUCCESS, manages data in your store.
+_CAUTION: for now, `fromTo` works only with state stored as [Immutable](https://github.com/facebook/immutable-js/) iterables._
+
+Makes the API call, dispatches REQUEST and FAILURE or SUCCESS actions, and populates your store with response data.
 
 **Arguments:**
-1. `from` (Function): a function returning a Promise. Should resolve to dispatch SUCCESS or reject for FAILURE.
- Data, returned by this Promise, will be saved in the store.
-2. `to` (Object or Array<string>): target in your state, where you want to store information.
 
-`to` as object should contain 3 properties:
- - `request` (Array<string>): target to save boolean value if `from()` did not resolve/reject yet,
- - `failure` (Array<string>): target to save returned data on reject,
- - `success` (Array<string>): target to save returned data on resolve.
+`from` (Function)
 
-If `to` is an array of strings - it will be transformed into an object:
+A function returning a Promise.
+
+`to` (Array<string> or Object)
+
+The path to the target location in your store for data returned by `from`.
+
+If `to` is an Array, `fromTo` will automatically create
+
 ```js
 {
-  request: [...to, 'isRequesting'],
-  failure: [...to, 'error'],
-  success: [...to, 'data'],
+  isRequesting: (boolean),  // true if `from` has not resolved/rejected
+  error: (any),             // data returned by `from` rejecting, if any
+  data: (any),              // data returned by `from` resolving, if any
 }
 ```
 
-CAUTION: this library will work only with iterable properties of the state, created by [immutable](https://github.com/facebook/immutable-js/).
+at the target location.
 
-3. `[ through ]` (Object): contains adapters, which should return transformed data before saving it
- to the store. Can contain following properties:
- - `responseAdapter` (Function): will receive resolved data as the only argument,
- - `errorAdapter` (Function): will receive rejected data as the only argument.
-This library was written for sing with [axios](https://github.com/mzabriskie/axios), so it has
- default adapters, which are available in `./src/from-to.js`.
+If you want to specify different locations for these three, pass an object like
 
-## Simple example
-
-### When resolves
-
-State before:
 ```js
 {
-  ...otherData,
-  dogs: Immutable.fromJS({}),
+  request: (Array<string>),
+  failure: (Array<string>),
+  success: (Array<string>),
 }
 ```
-Dispatch `fromTo`:
+
+`[through]` (Object)
+
+Contains adapters to transform data returned by `from` before it is saved in the store at `to`.
+
+Looks like
+
+```js
+{
+  errorAdapter: (Function),     // transforms data returned by `from` rejecting, if any
+  responseAdapter: (Function),  // transforms data returned by `from` resolving, if any
+}
+```
+
+Note: This library was written for using with [axios](https://github.com/mzabriskie/axios), so the
+ default adapters fit axios. You can see these in `./src/from-to.js`.
+
+## Simple usage
+
+Dispatch `fromTo`
+
 ```js
 // axios call returns {"mood": "happy"} as response body, 200 as status
 
@@ -105,62 +109,31 @@ dispatch(fromTo(
   ['dogs', 'goodBoy'],
 ));
 ```
-State during the axios call:
-```js
-{
-  ...otherData,
-  dogs: Immutable.fromJS({
-    goodBoy: {
-      isRequesting: true,
-    },
-  }),
-}
-```
-State after the axios call:
-```js
-{
-  ...otherData,
-  dogs: Immutable.fromJS({
-    goodBoy: {
-      isRequesting: false,
-      data: {
-        mood: 'happy',
-      },
-    },
-  }),
-}
-```
 
-### When rejects
+State before
 
-State before:
 ```js
 {
   ...otherData,
   dogs: Immutable.fromJS({}),
 }
 ```
-Dispatch `fromTo`:
-```js
-// axios call returns {"not": "found"} as response body, 404 as status
 
-dispatch(fromTo(
-  () => axios.get('dogs.io/bad-boy'), 
-  ['dogs', 'goodBoy'],
-));
-```
-State during the axios call:
+State before `from` resolves/rejects
+
 ```js
 {
   ...otherData,
   dogs: Immutable.fromJS({
-    badBoy: {
+    goodBoy: {
       isRequesting: true,
     },
   }),
 }
 ```
-State after the axios call:
+
+State if `from` rejects
+
 ```js
 {
   ...otherData,
@@ -176,20 +149,26 @@ State after the axios call:
 }
 ```
 
-## Complex example
+State if `from` resolves
 
-### When resolves
-
-State before:
 ```js
 {
   ...otherData,
-  dogs: Immutable.fromJS({}),
-  errors: Immutable.fromJS({}),
-  requests: Immutable.fromJS({}),
+  dogs: Immutable.fromJS({
+    goodBoy: {
+      isRequesting: false,
+      data: {
+        mood: 'happy',
+      },
+    },
+  }),
 }
 ```
-Dispatch `fromTo`:
+
+## Power usage
+
+Dispatch `fromTo`
+
 ```js
 // axios call returns {results: {"mood": "happy"}} as response body, 200 as status
 
@@ -206,7 +185,20 @@ dispatch(fromTo(
   },
 ));
 ```
-State during the axios call:
+
+State before
+
+```js
+{
+  ...otherData,
+  dogs: Immutable.fromJS({}),
+  errors: Immutable.fromJS({}),
+  requests: Immutable.fromJS({}),
+}
+```
+
+State before `from` resolves/rejects
+
 ```js
 {
   ...otherData,
@@ -217,7 +209,24 @@ State during the axios call:
   }),
 }
 ```
-State after the axios call:
+
+State if `from` rejects
+
+```js
+{
+  ...otherData,
+  dogs: Immutable.fromJS({}),
+  errors: Immutable.fromJS({
+    goodBoy: 'The error is someError',
+  }),
+  requests: Immutable.fromJS({
+    goodBoy: false,
+  }),
+}
+```
+
+State if `from` resolves
+
 ```js
 {
   ...otherData,
