@@ -13,6 +13,7 @@
     "build": "yarn run build:commonjs && yarn run build:es"
   },
   "author": "Vasyl Bratushka <bratushka.v@gmail.com>",
+  "contributors": ["Marc Davies <mwgdavies@gmail.com>"],
   "license": "WTFPL",
   "keywords": [
     "from-to",
