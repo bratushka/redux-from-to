@@ -75,9 +75,9 @@ If you want to specify different locations for these three, pass an object like
 
 ```js
 {
-  request: (Array<string>),
-  failure: (Array<string>),
-  success: (Array<string>),
+  request: (Array<any>),
+  failure: (Array<any>),
+  success: (Array<any>),
 }
 ```
 
@@ -138,7 +138,7 @@ State if `from` rejects
 {
   ...otherData,
   dogs: Immutable.fromJS({
-    badBoy: {
+    goodBoy: {
       isRequesting: false,
       error: {
         data: { not: 'found' },
