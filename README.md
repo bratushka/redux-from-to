@@ -93,6 +93,7 @@ Looks like
   responseAdapter: (Function),  // transforms data returned by `from` resolving, if any
 }
 ```
+Adapters receive **state** as second argument.
 
 Note: This library was written for using with [axios](https://github.com/mzabriskie/axios), so the
  default adapters fit axios. You can see these in `./src/from-to.js`.

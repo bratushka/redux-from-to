@@ -54,14 +54,15 @@ export function fromTo(
   } : to;
 
   return (dispatch, getState) => {
-    values(targets).forEach(target => checkTarget(getState(), target));
+    const state = getState();
+    values(targets).forEach(target => checkTarget(state, target));
 
     const targetArgs = [targets.request, targets.failure, targets.success];
     dispatch(request(undefined, ...targetArgs));
 
     return from().then(
-      resolved => dispatch(success(responseAdapter(resolved), ...targetArgs)),
-      rejected => dispatch(failure(errorAdapter(rejected), ...targetArgs)),
+      resolved => dispatch(success(responseAdapter(resolved, state), ...targetArgs)),
+      rejected => dispatch(failure(errorAdapter(rejected, state), ...targetArgs)),
     );
   };
 }

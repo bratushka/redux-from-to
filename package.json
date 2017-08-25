@@ -1,6 +1,6 @@
 {
   "name": "redux-from-to",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
