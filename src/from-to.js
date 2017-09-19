@@ -62,7 +62,10 @@ export function fromTo(
 
     return from().then(
       resolved => dispatch(success(responseAdapter(resolved, state), ...targetArgs)),
-      rejected => dispatch(failure(errorAdapter(rejected, state), ...targetArgs)),
+      (rejected) => {
+        dispatch(failure(errorAdapter(rejected, state), ...targetArgs));
+        throw new Error(rejected);
+      },
     );
   };
 }
