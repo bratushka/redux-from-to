@@ -84,13 +84,24 @@ describe('fromTo', () => {
     it('REQUEST and FAILURE on from.reject', () => {
       const store = getStore();
 
-      return store.dispatch(fromTo(() => Promise.reject(Error()), ['data'])).then(() => {
+      return store.dispatch(fromTo(() => Promise.reject(Error()), ['data'])).catch(() => {
         const actions = store.getActions();
 
         // noinspection BadExpressionStatementJS
         expect(isRequest(actions[0])).to.be.true; // eslint-disable-line no-unused-expressions
         // noinspection BadExpressionStatementJS
         expect(isFailure(actions[1])).to.be.true; // eslint-disable-line no-unused-expressions
+      });
+    });
+  });
+
+  describe('from.reject', () => {
+    it('should re-throw the error', () => {
+      const store = getStore();
+
+      return store.dispatch(fromTo(() => Promise.reject(Error()), ['data'])).catch((error) => {
+        // noinspection BadExpressionStatementJS
+        expect(error).to.be.an('error'); // eslint-disable-line no-unused-expressions
       });
     });
   });
@@ -119,7 +130,7 @@ describe('fromTo', () => {
         { errorAdapter: error => [error.message, error.message].join(' ') },
       );
 
-      return store.dispatch(action).then(() => {
+      return store.dispatch(action).catch(() => {
         const actions = store.getActions();
 
         expect(actions[1].error).to.equal('error error');
