@@ -6,6 +6,10 @@ before_install:
 script:
   - npm run lint
   - npm run test
+  - npm run cover
+  - npm run cover:check
+after_install:
+  - npm run cover:report
 branches:
   only:
     - master

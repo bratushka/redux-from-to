@@ -25,6 +25,14 @@ const failureAction = failure(...actionArgs);
 const successAction = success(...actionArgs);
 
 describe('reducer', () => {
+  describe('if action is unrelated', () => {
+    it('should return the same object', () => {
+      const actual = reducer(stateMock, { type: 'unrelatedAction' });
+
+      expect(actual).to.equal(stateMock); // eslint-disable-line no-unused-expressions
+    });
+  });
+
   describe('if action is request', () => {
     it('should set true in the requestTarget', () => {
       const state = reducer(stateMock, requestAction);
