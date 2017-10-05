@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  default:
-    command: yarn test
-    image: node:6-alpine
+  fromto:
+    build: .
+    container_name: fromto
     volumes:
       - .:/code/
     working_dir: /code

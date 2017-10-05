@@ -1,8 +1,11 @@
-/src
-/test
 /.babelrc
 /.eslintrc
 /.eslintignore
+/.nyc_output/
 /.gitignore
+/coverage.lcov
+/coverage/
 /docker-compose.yml
+/src
+/test
 /yarn.lock
