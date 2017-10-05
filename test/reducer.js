@@ -160,4 +160,44 @@ describe('reducer', () => {
       expect(actualSuccess).to.deep.equal(localDataMock);
     });
   });
+
+  describe('should not affect', () => {
+    it('isRequesting if to.request is undefined', () => {
+      const action = request(
+        dataMock,
+        undefined,
+        errorTarget,
+        dataTarget,
+      );
+      const state = reducer(stateMock, action);
+
+      expect(state.requestReducer).to.equal(stateMock.requestReducer);
+    });
+
+    it('error if to.failure is undefined', () => {
+      const action = failure(
+        dataMock,
+        requestTarget,
+        undefined,
+        dataTarget,
+      );
+      const state = reducer(stateMock, action);
+
+      expect(state.errorReducer).to.equal(stateMock.errorReducer);
+      expect(state.requestReducer).not.to.equal(stateMock.requestReducer);
+    });
+
+    it('data if to.success is undefined', () => {
+      const action = success(
+        dataMock,
+        requestTarget,
+        errorTarget,
+        undefined,
+      );
+      const state = reducer(stateMock, action);
+
+      expect(state.dataReducer).to.equal(stateMock.dataReducer);
+      expect(state.requestReducer).not.to.equal(stateMock.requestReducer);
+    });
+  });
 });

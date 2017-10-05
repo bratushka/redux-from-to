@@ -102,6 +102,14 @@ describe('utils', () => {
   });
 
   describe('checkTarget', () => {
+    it('should not throw when target is undefined', () => {
+      function actual() {
+        checkTarget({}, undefined);
+      }
+
+      expect(actual).not.to.throw(Error);
+    });
+
     it('should throw when state[target[0]] is not immutable structure', () => {
       function actual() {
         checkTarget({ request: {} }, ['request', 1]);
