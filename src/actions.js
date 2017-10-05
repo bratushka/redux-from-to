@@ -49,7 +49,7 @@ export function failure(error, requestTarget, errorTarget, dataTarget) {
  */
 export function success(data, requestTarget, _errorTarget, dataTarget) {
   return {
-    type: actionTypeBuilder(dataTarget, ACTIONS.SUCCESS),
+    type: actionTypeBuilder(dataTarget || ['noDataTarget'], ACTIONS.SUCCESS),
     data,
     requestTarget,
     dataTarget,

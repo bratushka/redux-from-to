@@ -62,7 +62,7 @@ export function actionTypeMatches(action) {
  * @throws {Error}
  */
 export function checkTarget(state, target) {
-  if (!Immutable.Iterable.isIterable(state[target[0]])) {
+  if (target !== undefined && !Immutable.Iterable.isIterable(state[target[0]])) {
     throw new Error(`"state['${target[0]}']" should be an immutable structure.`);
   }
 }
