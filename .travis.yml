@@ -8,7 +8,7 @@ script:
   - npm run test
   - npm run cover
   - npm run cover:check
-after_install:
+after_success:
   - npm run cover:report
 branches:
   only:

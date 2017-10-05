@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/bratushka/redux-from-to.svg?branch=master)](https://travis-ci.org/bratushka/redux-from-to)
+[![codecov](https://codecov.io/gh/bratushka/redux-from-to/branch/master/graph/badge.svg)](https://codecov.io/gh/bratushka/redux-from-to)
 
 # redux-from-to
 
