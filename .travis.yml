@@ -7,8 +7,8 @@ script:
   - npm run lint
   - npm run test
   - npm run cover
-after_install:
   - npm run cover:check
+after_install:
   - npm run cover:report
 branches:
   only:
