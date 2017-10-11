@@ -3,7 +3,8 @@ import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import { expect } from 'chai';
 
-import { fromTo } from '../src/from-to';
+import { request, failure, success } from '../src/actions';
+import { fromTo, targetTransformer } from '../src/from-to';
 import { isRequest, isFailure, isSuccess } from '../src/utils';
 
 
@@ -18,6 +19,25 @@ function getStore() {
 }
 
 describe('fromTo', () => {
+  describe('targetTransformer', () => {
+    it('should transform an array into object', () => {
+      const to = ['data'];
+      const expected = {
+        request: [...to, 'isRequesting'],
+        failure: [...to, 'error'],
+        success: [...to, 'data'],
+      };
+
+      expect(targetTransformer(to)).to.deep.equal(expected);
+    });
+
+    it('should leave the object as is', () => {
+      const to = { some: 'stuff' };
+
+      expect(targetTransformer(to)).to.equal(to);
+    });
+  });
+
   describe('should throw because of target', () => {
     it('request', () => {
       const store = mockStore({
@@ -123,6 +143,74 @@ describe('fromTo', () => {
         const actions = store.getActions();
 
         expect(actions[1].error).to.equal('error error');
+      });
+    });
+  });
+
+  describe('should dispatch only', () => {
+    it('request', () => {
+      const actualStore = getStore();
+      const expectedStore = getStore();
+      const targets = targetTransformer(['data']);
+      const targetArgs = [targets.request, targets.failure, targets.success];
+
+      const action = fromTo(
+        () => Promise.resolve('data'),
+        ['data'],
+        undefined,
+        { action: request },
+      );
+
+      return actualStore.dispatch(action).then(() => {
+        expectedStore.dispatch(request('data', ...targetArgs));
+
+        expect(actualStore.getActions()).to.deep.equal(expectedStore.getActions());
+      });
+    });
+
+    it('failure', () => {
+      const actualStore = getStore();
+      const expectedStore = getStore();
+      const targets = targetTransformer(['data']);
+      const targetArgs = [targets.request, targets.failure, targets.success];
+
+      const action = fromTo(
+        () => Promise.reject('data'),
+        ['data'],
+        {
+          errorAdapter: x => x,
+          responseAdapter: x => x,
+        },
+        { action: failure },
+      );
+
+      return actualStore.dispatch(action).then(() => {
+        expectedStore.dispatch(failure('data', ...targetArgs));
+
+        expect(actualStore.getActions()).to.deep.equal(expectedStore.getActions());
+      });
+    });
+
+    it('success', () => {
+      const actualStore = getStore();
+      const expectedStore = getStore();
+      const targets = targetTransformer(['data']);
+      const targetArgs = [targets.request, targets.failure, targets.success];
+
+      const action = fromTo(
+        () => Promise.resolve('data'),
+        ['data'],
+        {
+          errorAdapter: x => x,
+          responseAdapter: x => x,
+        },
+        { action: success },
+      );
+
+      return actualStore.dispatch(action).then(() => {
+        expectedStore.dispatch(success('data', ...targetArgs));
+
+        expect(actualStore.getActions()).to.deep.equal(expectedStore.getActions());
       });
     });
   });

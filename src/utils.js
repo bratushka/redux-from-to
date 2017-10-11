@@ -56,6 +56,7 @@ export function actionTypeMatches(action) {
 
 /**
  * Throws if state[target[0]] is not an immutable structure.
+ * Target can also be undefined.
  *
  * @param {Object} state
  * @param {string[]} target
