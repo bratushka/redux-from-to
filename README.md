@@ -82,6 +82,8 @@ If you want to specify different locations for these three, pass an object like
 }
 ```
 
+If any of the locations is not specified - it will be ignored in store updating. Example: if `request` is omitted - the state will not be populated with `isRequesting` property. 
+
 `[through]` (Object)
 
 Contains adapters to transform data returned by `from` before it is saved in the store at `to`.
