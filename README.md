@@ -44,7 +44,7 @@ You're all set!
 
 ## API
 
-### fromTo(from, to, [through])
+### fromTo(from, to, [through, [options]])
 
 _CAUTION: for now, `fromTo` works only with state stored as [Immutable](https://github.com/facebook/immutable-js/) iterables._
 
@@ -98,6 +98,41 @@ Adapters receive **state** as second argument.
 
 Note: This library was written for using with [axios](https://github.com/mzabriskie/axios), so the
  default adapters fit axios. You can see these in `./src/from-to.js`.
+
+`[options]` (Object)
+
+Contains additional parameters, which are not frequently used. Currently only `action` property is accepted. In case `action` is specified - only this action will be dispatched.
+
+Example:
+
+```js
+import axios from 'axios';
+import { expect } from 'chai';
+import { fromTo, actions as fromToActions } from 'redux-from-to';
+
+import myStoreConstructor from './myStoreConstructor';
+
+function fetchUser(action) {
+  return fromTo(
+    () => axios.get('http://localhost/me'),
+    ['user'],
+    undefined,
+    { action },
+  );
+}
+
+describe('fetchUser', () => {
+  it('should have `isRequesting` flag while fetching', () => {
+    const store = myStoreConstructor();
+    
+    return store.dispatch(fetchUser(fromToActions.request)).then(() => {
+      const actual = store.getState().user.get('isRequesting');
+      
+      expect(actual).to.be.true;
+    });
+  });
+})
+```
 
 ## Simple usage
 
